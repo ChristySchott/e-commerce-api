@@ -1,0 +1,22 @@
+# Ignore node_modules
+node_modules/
+
+# Ignore build files
+dist/
+build/
+
+# Ignore envs
+.env
+
+# Ignore logs
+*.log
+
+# Ignore operational system files
+.DS_Store
+
+# Ignore IDEs
+.vscode/
+.idea/
+
+# Ignore typescript files
+lib/
