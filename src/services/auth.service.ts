@@ -31,6 +31,15 @@ export class AuthService {
       })
   }
 
+  async login(email: string, password: string): Promise<UserCredential> {
+    return await signInWithEmailAndPassword(getFirebaseAuth(), email, password).catch((err) => {
+      if (err instanceof FirebaseError && err.code === 'auth/invalid-credential') {
+        throw new UnauthorizedError()
+      }
+      throw err
+    })
+  }
+
   async update(id: string, user: User): Promise<void> {
     const props: UpdateRequest = {
       displayName: user.name,
@@ -44,12 +53,7 @@ export class AuthService {
     await getAdminAuth().updateUser(id, props)
   }
 
-  async login(email: string, password: string): Promise<UserCredential> {
-    return await signInWithEmailAndPassword(getFirebaseAuth(), email, password).catch((err) => {
-      if (err instanceof FirebaseError && err.code === 'auth/invalid-credential') {
-        throw new UnauthorizedError()
-      }
-      throw err
-    })
+  async delete(id: string): Promise<void> {
+    await getAdminAuth().deleteUser(id)
   }
 }

@@ -54,6 +54,7 @@ export class UserService {
       throw new NotFoundError('User not found')
     }
 
+    await this.authService.delete(id)
     await this.userRepository.delete(id)
   }
 }
