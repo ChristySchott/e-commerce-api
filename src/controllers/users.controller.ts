@@ -1,59 +1,82 @@
 import { Request, Response } from 'express'
+import { getFirestore } from 'firebase-admin/firestore'
 
 interface User {
-  id: number
+  id: number | string
   name: string
   email: string
 }
 
-let id = 0
-const users: User[] = []
-
 export class UserController {
-  static getAll(req: Request<{ id: string }>, res: Response) {
+  static async getAll(req: Request, res: Response) {
+    const snapshot = await getFirestore().collection('users').get()
+
+    if (snapshot.empty) {
+      res.send([])
+    }
+
+    const users = snapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        }) as User,
+    )
+
     res.send(users)
   }
 
-  static getById(req: Request<{ id: string }>, res: Response) {
-    const userId = Number(req.params.id)
-    const user = users.find((user) => user.id === userId)
+  static async getById(req: Request<{ id: string }>, res: Response) {
+    const userId = req.params.id
 
-    res.send(user ?? { status: 404, message: 'Usuário não encontrado' })
+    const doc = await getFirestore().collection('users').doc(userId).get()
+
+    if (!doc.exists) {
+      res.status(404).end()
+    }
+
+    const user = { id: doc.id, ...doc.data() } as User
+    res.send(user)
   }
 
-  static save(req: Request<Omit<User, 'id'>>, res: Response) {
+  static async save(req: Request<Omit<User, 'id'>>, res: Response) {
     const user = req.body
 
-    users.push({ ...user, id: ++id })
-
-    res.send({ status: 201, message: 'Usuário criado com sucesso!' })
+    try {
+      await getFirestore().collection('users').add(user)
+      res.status(201).end()
+    } catch {
+      res.status(500).end()
+    }
   }
 
-  static update(req: Request<{ id: string }, null, Omit<User, 'id'>>, res: Response) {
-    const userId = Number(req.params.id)
-    const userIndex = users.findIndex((user) => user.id === userId)
+  static async update(req: Request<{ id: string }, null, Omit<User, 'id'>>, res: Response) {
+    const userId = req.params.id
+    const user = req.body as User
 
-    if (userIndex === -1) {
-      res.status(404).send({ message: 'Usuário não encontrado!' })
-      return
+    const userRef = getFirestore().collection('users').doc(userId)
+    const doc = await userRef.get()
+
+    if (!doc.exists) {
+      res.send({ status: 404, message: 'Usuário não encontrado' })
     }
 
-    const updatedUser = { ...users[userIndex], ...req.body }
-    users[userIndex] = updatedUser
-
-    res.send({ message: 'Usuário atualizado com sucesso!', user: updatedUser })
+    try {
+      await userRef.update({ name: user.name, email: user.email })
+      res.status(204).end()
+    } catch {
+      res.status(500).end()
+    }
   }
 
-  static delete(req: Request<{ id: string }, null, Omit<User, 'id'>>, res: Response) {
-    const userId = Number(req.params.id)
-    const userIndex = users.findIndex((user) => user.id === userId)
+  static async delete(req: Request<{ id: string }, null, Omit<User, 'id'>>, res: Response) {
+    const userId = req.params.id
 
-    if (userIndex === -1) {
-      res.status(404).send({ message: 'Usuário não encontrado!' })
-      return
+    try {
+      await getFirestore().collection('users').doc(userId).delete()
+      res.status(204).end()
+    } catch {
+      res.status(500).end()
     }
-
-    users.splice(userIndex, 1)
-    res.send({ message: 'Usuário removido com sucesso!', users: users })
   }
 }

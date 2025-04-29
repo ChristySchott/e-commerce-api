@@ -20,3 +20,6 @@ build/
 
 # Ignore typescript files
 lib/
+
+# Ignore firebase files
+firebase-adminsdk.json
