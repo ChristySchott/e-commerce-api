@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { getFirestore } from 'firebase-admin/firestore'
 import { ValidationError } from '../errors/validation.error.js'
+import { NotFoundError } from '../errors/not-found.error.js'
 
 interface User {
   id: number | string
@@ -31,6 +32,10 @@ export class UserController {
       const userId = req.params.id
       const doc = await getFirestore().collection('users').doc(userId).get()
 
+      if (!doc.exists) {
+        throw new NotFoundError('User not found')
+      }
+
       const user = { id: doc.id, ...doc.data() } as User
       res.send(user)
     } catch (error) {
@@ -43,11 +48,11 @@ export class UserController {
       const user = req.body
 
       if (!user?.email) {
-        throw new ValidationError('E-mail is required.')
+        throw new ValidationError('E-mail is required')
       }
 
       if (!user?.name) {
-        throw new ValidationError('Name is required.')
+        throw new ValidationError('Name is required')
       }
 
       await getFirestore().collection('users').add(user)
@@ -66,9 +71,13 @@ export class UserController {
       const userId = req.params.id
       const user = req.body as User
 
-      const userRef = getFirestore().collection('users').doc(userId)
+      const docRef = getFirestore().collection('users').doc(userId)
 
-      await userRef.update({ name: user.name, email: user.email })
+      if (!(await docRef.get()).exists) {
+        throw new NotFoundError('User not found')
+      }
+
+      await docRef.update({ name: user.name, email: user.email })
       res.status(204).end()
     } catch (error) {
       next(error)
@@ -83,7 +92,13 @@ export class UserController {
     try {
       const userId = req.params.id
 
-      await getFirestore().collection('users').doc(userId).delete()
+      const docRef = getFirestore().collection('users').doc(userId)
+
+      if (!(await docRef.get()).exists) {
+        throw new NotFoundError('User not found')
+      }
+
+      await docRef.delete()
       res.status(204).end()
     } catch (error) {
       next(error)
