@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler'
 import { celebrate, Segments } from 'celebrate'
 
 import { UserController } from '../controllers/users.controller.js'
-import { userSchema } from '../models/user.model.js'
+import { newUserSchema, updateUserSchema } from '../models/user.model.js'
 
 export const userRoutes = Router()
 
@@ -12,14 +12,14 @@ userRoutes.get('/users/:id', asyncHandler(UserController.getById))
 userRoutes.post(
   '/users',
   celebrate({
-    [Segments.BODY]: userSchema,
+    [Segments.BODY]: newUserSchema,
   }),
   asyncHandler(UserController.save),
 )
 userRoutes.put(
   '/users/:id',
   celebrate({
-    [Segments.BODY]: userSchema,
+    [Segments.BODY]: updateUserSchema,
   }),
   asyncHandler(UserController.update),
 )
