@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { User } from '../models/user.model.js'
 import { UserService } from '../services/user.service.js'
 
-export class UserController {
+export class UsersController {
   static async getAll(req: Request, res: Response) {
     res.send(await new UserService().getAll())
   }
