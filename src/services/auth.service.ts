@@ -8,6 +8,7 @@ import {
   signInWithEmailAndPassword,
   getAuth as getFirebaseAuth,
   UserCredential,
+  sendPasswordResetEmail,
 } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
 
@@ -55,5 +56,9 @@ export class AuthService {
 
   async delete(id: string): Promise<void> {
     await getAdminAuth().deleteUser(id)
+  }
+
+  async recovery(email: string): Promise<void> {
+    await sendPasswordResetEmail(getFirebaseAuth(), email)
   }
 }
