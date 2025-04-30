@@ -14,7 +14,7 @@ export class UsersController {
     res.send(await new UserService().getById(userId))
   }
 
-  static async save(req: Request<Omit<User, 'id'>>, res: Response) {
+  static async save(req: Request<null, null, User>, res: Response) {
     const user = req.body
 
     await new UserService().save(user)

@@ -5,22 +5,22 @@ import { celebrate, Segments } from 'celebrate'
 import { UsersController } from '../controllers/users.controller.js'
 import { newUserSchema, updateUserSchema } from '../models/user.model.js'
 
-export const userRoutes = Router()
+export const usersRoutes = Router()
 
-userRoutes.get('/users', asyncHandler(UsersController.getAll))
-userRoutes.get('/users/:id', asyncHandler(UsersController.getById))
-userRoutes.post(
+usersRoutes.get('/users', asyncHandler(UsersController.getAll))
+usersRoutes.get('/users/:id', asyncHandler(UsersController.getById))
+usersRoutes.post(
   '/users',
   celebrate({
     [Segments.BODY]: newUserSchema,
   }),
   asyncHandler(UsersController.save),
 )
-userRoutes.put(
+usersRoutes.put(
   '/users/:id',
   celebrate({
     [Segments.BODY]: updateUserSchema,
   }),
   asyncHandler(UsersController.update),
 )
-userRoutes.delete('/users/:id', asyncHandler(UsersController.delete))
+usersRoutes.delete('/users/:id', asyncHandler(UsersController.delete))
