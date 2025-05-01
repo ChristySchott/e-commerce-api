@@ -1,12 +1,16 @@
 import { Company } from '../models/company.model.js'
 import { NotFoundError } from '../errors/not-found.error.js'
 import { CompanyRepository } from '../repositories/company.repository.js'
+import { UploadFileService } from './upload-file.service.js'
+import { ValidationError } from '../errors/validation.error.js'
 
 export class CompanyService {
   private companyRepository: CompanyRepository
+  private uploadFileService: UploadFileService
 
   constructor() {
     this.companyRepository = new CompanyRepository()
+    this.uploadFileService = new UploadFileService('images/companies/')
   }
 
   async getAll(): Promise<Company[]> {
@@ -24,6 +28,9 @@ export class CompanyService {
   }
 
   async save(company: Omit<Company, 'id'>): Promise<void> {
+    const logoUrl = await this.uploadFileService.upload(company.logo)
+    company.logo = logoUrl
+
     await this.companyRepository.save(company)
   }
 
@@ -32,6 +39,10 @@ export class CompanyService {
 
     if (!_company) {
       throw new NotFoundError('Company not found')
+    }
+
+    if (!this.isValidUrl(company.logo)) {
+      company.logo = await this.uploadFileService.upload(company.logo)
     }
 
     _company.document = company.document
@@ -45,5 +56,23 @@ export class CompanyService {
     _company.isActive = company.isActive
 
     await this.companyRepository.update(_company)
+  }
+
+  private isValidUrl(urlString: string): boolean {
+    try {
+      const url = new URL(urlString)
+
+      if (url.host !== 'firebasestorage.googleapis.com') {
+        throw new ValidationError('Invalid URL origin')
+      }
+
+      return true
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        throw err
+      }
+
+      return false
+    }
   }
 }
