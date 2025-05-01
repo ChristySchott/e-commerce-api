@@ -1,12 +1,16 @@
 import { Category } from '../models/category.model.js'
 import { NotFoundError } from '../errors/not-found.error.js'
 import { CategoryRepository } from '../repositories/category.repository.js'
+import { ProductRepository } from '../repositories/product.repository.js'
+import { ValidationError } from '../errors/validation.error.js'
 
 export class CategoryService {
   private categoryRepository: CategoryRepository
+  private productRepository: ProductRepository
 
   constructor() {
     this.categoryRepository = new CategoryRepository()
+    this.productRepository = new ProductRepository()
   }
 
   async getAll(): Promise<Category[]> {
@@ -38,6 +42,12 @@ export class CategoryService {
 
   async delete(id: string): Promise<void> {
     await this.getById(id)
+
+    if ((await this.productRepository.getCountByCategory(id)) > 0) {
+      throw new ValidationError(
+        'This category cannot be deleted because it is linked to one or more products',
+      )
+    }
 
     await this.categoryRepository.delete(id)
   }

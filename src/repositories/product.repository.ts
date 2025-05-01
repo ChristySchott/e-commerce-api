@@ -45,6 +45,11 @@ export class ProductRepository {
     this.collection.doc(id).delete()
   }
 
+  async getCountByCategory(categoryId: string): Promise<number> {
+    const countSnapshot = await this.collection.where('category.id', '==', categoryId).count().get()
+    return countSnapshot.data().count
+  }
+
   private snapshotToArray(snapshot: QuerySnapshot): Product[] {
     const products = snapshot.docs.map((doc) => ({
       id: doc.id,
