@@ -28,11 +28,7 @@ export class CategoryService {
   }
 
   async update(id: string, category: Category): Promise<void> {
-    const _category = await this.categoryRepository.getById(id)
-
-    if (!_category) {
-      throw new NotFoundError('Category not found')
-    }
+    const _category = await this.getById(id)
 
     _category.description = category.description
     _category.isActive = category.isActive
@@ -41,11 +37,7 @@ export class CategoryService {
   }
 
   async delete(id: string): Promise<void> {
-    const _category = await this.categoryRepository.getById(id)
-
-    if (!_category) {
-      throw new NotFoundError('Category not found')
-    }
+    await this.getById(id)
 
     await this.categoryRepository.delete(id)
   }

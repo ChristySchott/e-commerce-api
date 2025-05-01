@@ -34,11 +34,7 @@ export class UserService {
   }
 
   async update(id: string, user: User): Promise<void> {
-    const _user = await this.userRepository.getById(id)
-
-    if (!_user) {
-      throw new NotFoundError('User not found')
-    }
+    const _user = await this.getById(id)
 
     _user.name = user.name
     _user.email = user.email
@@ -48,11 +44,7 @@ export class UserService {
   }
 
   async delete(id: string): Promise<void> {
-    const _user = await this.userRepository.getById(id)
-
-    if (!_user) {
-      throw new NotFoundError('User not found')
-    }
+    await this.getById(id)
 
     await this.authService.delete(id)
     await this.userRepository.delete(id)
