@@ -1,5 +1,7 @@
 import { Joi } from 'celebrate'
 
+import { passwordRegexPattern } from '../utils/regex-utils.js'
+
 export interface User {
   id: string
   name: string
@@ -7,21 +9,31 @@ export interface User {
   password?: string
 }
 
+const passwordSchema = Joi.string().min(6).max(32).regex(passwordRegexPattern)
+
 export const newUserSchema = Joi.object().keys({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
+  password: passwordSchema.required().messages({
+    'string.pattern.base':
+      'Password must include uppercase, lowercase, number and special character.',
+  }),
 })
 
 export const updateUserSchema = Joi.object().keys({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
-  password: Joi.string().min(6),
+  password: passwordSchema.messages({
+    'string.pattern.base':
+      'Password must include uppercase, lowercase, number and special character.',
+  }),
 })
 
 export const authLoginSchema = Joi.object().keys({
   email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
+  password: passwordSchema.required().messages({
+    'string.pattern.base': 'Invalid password format.',
+  }),
 })
 
 export const authRecoverySchema = Joi.object().keys({
