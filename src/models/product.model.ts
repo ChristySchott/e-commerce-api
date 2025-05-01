@@ -40,3 +40,7 @@ export const updateProductSchema = Joi.object().keys({
     .required(),
   isActive: Joi.boolean().required(),
 })
+
+export const searchProductSchema = Joi.object().keys({
+  categoryId: Joi.string().trim().required(),
+})

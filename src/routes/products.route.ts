@@ -3,11 +3,22 @@ import asyncHandler from 'express-async-handler'
 import { celebrate, Segments } from 'celebrate'
 
 import { ProductsController } from '../controllers/products.controller.js'
-import { newProductSchema, updateProductSchema } from '../models/product.model.js'
+import {
+  newProductSchema,
+  searchProductSchema,
+  updateProductSchema,
+} from '../models/product.model.js'
 
 export const productsRoutes = Router()
 
 productsRoutes.get('/products', asyncHandler(ProductsController.getAll))
+productsRoutes.get(
+  '/products/search',
+  celebrate({
+    [Segments.QUERY]: searchProductSchema,
+  }),
+  asyncHandler(ProductsController.search),
+)
 productsRoutes.get('/products/:id', asyncHandler(ProductsController.getById))
 productsRoutes.post(
   '/products',
