@@ -29,7 +29,7 @@ export class UsersController {
     res.status(204).end()
   }
 
-  static async delete(req: Request<{ id: string }, null, Omit<User, 'id'>>, res: Response) {
+  static async delete(req: Request<{ id: string }>, res: Response) {
     const userId = req.params.id
 
     await new UserService().delete(userId)

@@ -29,7 +29,7 @@ export class CategoriesController {
     res.status(204).end()
   }
 
-  static async delete(req: Request<{ id: string }, null, Omit<Category, 'id'>>, res: Response) {
+  static async delete(req: Request<{ id: string }>, res: Response) {
     const categoryId = req.params.id
 
     await new CategoryService().delete(categoryId)
