@@ -3,6 +3,7 @@ import 'dotenv/config'
 import express from 'express'
 import { initializeApp as initializeAdminApp } from 'firebase-admin/app'
 import { initializeApp as initializeFirebaseApp } from 'firebase/app'
+import { onRequest } from 'firebase-functions/https'
 
 import { routes } from './routes/index.js'
 import { auth } from './middlewares/auth.middleware.js'
@@ -21,4 +22,4 @@ routes(app)
 pageNotFoundError(app)
 errorHandler(app)
 
-app.listen(3000)
+export const api = onRequest(app)
