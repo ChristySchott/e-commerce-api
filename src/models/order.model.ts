@@ -1,5 +1,10 @@
 import { Joi } from 'celebrate'
-import { Timestamp } from 'firebase-admin/firestore'
+import {
+  FirestoreDataConverter,
+  DocumentData,
+  QueryDocumentSnapshot,
+  Timestamp,
+} from 'firebase-admin/firestore'
 
 import { Company } from './company.model.js'
 import { Customer, customerSchema } from './customer.model.js'
@@ -23,15 +28,15 @@ export class Order {
 
   constructor(data: Order) {
     this.id = data.id
-    this.company = data.company
+    this.company = new Company(data.company)
     this.customer = data.customer
     this.address = data.address
     this.taxpayerId = data.taxpayerId
     this.date = data.date instanceof Timestamp ? data.date.toDate() : data.date
     this.isDelivery = data.isDelivery
     this.deliveryFee = data.deliveryFee
-    this.paymentMethod = data.paymentMethod
-    this.items = data.items
+    this.paymentMethod = new PaymentMethod(data.paymentMethod)
+    this.items = data.items?.map((item: OrderItem) => new OrderItem(item))
     this.status = data.status ?? OrderStatus.pending
     this.notes = data.notes
   }
@@ -87,3 +92,44 @@ export const searchOrderSchema = Joi.object().keys({
     .only()
     .allow(...Object.values(OrderStatus)),
 })
+
+export const orderConverter: FirestoreDataConverter<Order> = {
+  toFirestore: (order: Order): DocumentData => ({
+    company: {
+      id: order.company.id,
+      logo: order.company.logo,
+      document: order.company.document,
+      corporateName: order.company.corporateName,
+      tradeName: order.company.tradeName,
+      phone: order.company.phone,
+      address: order.company.address,
+      location: order.company.location,
+    },
+    customer: { name: order.customer.name, phone: order.customer.phone },
+    address: {
+      zipcode: order.address.zipcode,
+      street: order.address.street,
+      number: order.address.number,
+      complement: order.address.complement,
+      city: order.address.city,
+      neighborhood: order.address.neighborhood,
+      uf: order.address.uf,
+    },
+    taxpayerId: order.taxpayerId,
+    date: order.date instanceof Date ? Timestamp.fromDate(order.date) : order.date,
+    isDelivery: order.isDelivery,
+    deliveryFee: order.company.deliveryFee,
+    paymentMethod: {
+      id: order.paymentMethod.id,
+      description: order.paymentMethod.description,
+    },
+    status: order.status,
+    notes: order.notes,
+  }),
+  fromFirestore: (snapshot: QueryDocumentSnapshot): Order => {
+    return new Order({
+      id: snapshot.id,
+      ...(snapshot.data() as Omit<Order, 'id'>),
+    })
+  },
+}
