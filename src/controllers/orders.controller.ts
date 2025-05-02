@@ -26,4 +26,15 @@ export class OrdersController {
     await new OrderService().save(order)
     res.status(201).end()
   }
+
+  static async updateStatus(
+    req: Request<{ id: string }, null, Pick<Order, 'status'>>,
+    res: Response,
+  ) {
+    const userId = req.params.id
+    const orderStatus = req.body.status
+
+    await new OrderService().updateStatus(userId, orderStatus)
+    res.status(204).end()
+  }
 }

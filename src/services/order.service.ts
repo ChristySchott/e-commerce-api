@@ -1,4 +1,4 @@
-import { Order, OrderQueryParams } from '../models/order.model.js'
+import { Order, OrderQueryParams, OrderStatus } from '../models/order.model.js'
 import { NotFoundError } from '../errors/not-found.error.js'
 import { OrderRepository } from '../repositories/order.repository.js'
 import { CompanyRepository } from '../repositories/company.repository.js'
@@ -72,5 +72,15 @@ export class OrderService {
     }
 
     await this.orderRepository.save(order)
+  }
+
+  async updateStatus(id: string, status: OrderStatus): Promise<void> {
+    const order = await this.orderRepository.getById(id)
+
+    if (!order) {
+      throw new NotFoundError('Order not found')
+    }
+
+    await this.orderRepository.updateStatus(id, status)
   }
 }

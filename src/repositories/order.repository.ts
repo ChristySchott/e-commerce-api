@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { CollectionReference, getFirestore, Query } from 'firebase-admin/firestore'
 
-import { Order, OrderQueryParams, orderConverter } from '../models/order.model.js'
+import { Order, OrderQueryParams, OrderStatus, orderConverter } from '../models/order.model.js'
 import { OrderItem, orderItemConverter } from '../models/order-item.model.js'
 
 export class OrderRepository {
@@ -59,5 +59,16 @@ export class OrderRepository {
     }
 
     await batch.commit()
+  }
+
+  async updateStatus(id: string, status: OrderStatus) {
+    await this.collection.withConverter(null).doc(id).set(
+      {
+        status: status,
+      },
+      {
+        merge: true,
+      },
+    )
   }
 }

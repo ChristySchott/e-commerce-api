@@ -97,6 +97,12 @@ export const newOrderSchema = Joi.object().keys({
   notes: Joi.string().trim().allow(null).default(null),
 })
 
+export const updateStatusOrderSchema = Joi.object().keys({
+  status: Joi.string()
+    .only()
+    .allow(...Object.values(OrderStatus).filter((status) => status !== OrderStatus.pending)),
+})
+
 export const searchOrderSchema = Joi.object().keys({
   companyId: Joi.string().trim(),
   startDate: Joi.date(),
