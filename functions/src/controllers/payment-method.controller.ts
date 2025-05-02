@@ -4,11 +4,11 @@ import { PaymentMethod } from '../models/payment-method.model.js'
 import { PaymentMethodService } from '../services/payment-method.service.js'
 
 export class PaymentMethodsController {
-  static async getAll(req: Request, res: Response) {
+  static async getAll(req: Request, res: Response<PaymentMethod[]>) {
     res.send(await new PaymentMethodService().getAll())
   }
 
-  static async getById(req: Request<{ id: string }>, res: Response) {
+  static async getById(req: Request<{ id: string }>, res: Response<PaymentMethod>) {
     const paymentMethodId = req.params.id
 
     res.send(await new PaymentMethodService().getById(paymentMethodId))

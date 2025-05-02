@@ -4,11 +4,11 @@ import { Category } from '../models/category.model.js'
 import { CategoryService } from '../services/category.service.js'
 
 export class CategoriesController {
-  static async getAll(req: Request, res: Response) {
+  static async getAll(req: Request, res: Response<Category[]>) {
     res.send(await new CategoryService().getAll())
   }
 
-  static async getById(req: Request<{ id: string }>, res: Response) {
+  static async getById(req: Request<{ id: string }>, res: Response<Category>) {
     const categoryId = req.params.id
 
     res.send(await new CategoryService().getById(categoryId))

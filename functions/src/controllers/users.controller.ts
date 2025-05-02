@@ -4,11 +4,11 @@ import { User } from '../models/user.model.js'
 import { UserService } from '../services/user.service.js'
 
 export class UsersController {
-  static async getAll(req: Request, res: Response) {
+  static async getAll(req: Request, res: Response<User[]>) {
     res.send(await new UserService().getAll())
   }
 
-  static async getById(req: Request<{ id: string }>, res: Response) {
+  static async getById(req: Request<{ id: string }>, res: Response<User>) {
     const userId = req.params.id
 
     res.send(await new UserService().getById(userId))

@@ -4,6 +4,7 @@ import { celebrate, Segments } from 'celebrate'
 
 import { OrdersController } from '../controllers/orders.controller.js'
 import {
+  Order,
   OrderQueryParams,
   newOrderSchema,
   searchOrderSchema,
@@ -15,7 +16,7 @@ export const ordersRoutes = Router()
 ordersRoutes.get(
   '/orders',
   celebrate({ [Segments.QUERY]: searchOrderSchema }),
-  asyncHandler<null, null, null, OrderQueryParams>(OrdersController.search),
+  asyncHandler<null, Order[], null, OrderQueryParams>(OrdersController.search),
 )
 ordersRoutes.get('/orders/:id/items', asyncHandler(OrdersController.getItemsByOrderId))
 ordersRoutes.get('/orders/:id', asyncHandler(OrdersController.getById))
