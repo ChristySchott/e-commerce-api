@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { Product } from '../models/product.model.js'
+import { Product, ProductQueryParams } from '../models/product.model.js'
 import { ProductService } from '../services/product.service.js'
 
 export class ProductsController {
@@ -8,7 +8,7 @@ export class ProductsController {
     res.send(await new ProductService().getAll())
   }
 
-  static async search(req: Request<null, null, null, { categoryId: string }>, res: Response) {
+  static async search(req: Request<null, null, null, ProductQueryParams>, res: Response) {
     const categoryId = req.query.categoryId
     res.send(await new ProductService().search(categoryId))
   }

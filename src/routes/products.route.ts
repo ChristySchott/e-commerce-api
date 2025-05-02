@@ -5,6 +5,7 @@ import { celebrate, Segments } from 'celebrate'
 import { ProductsController } from '../controllers/products.controller.js'
 import {
   newProductSchema,
+  ProductQueryParams,
   searchProductSchema,
   updateProductSchema,
 } from '../models/product.model.js'
@@ -17,7 +18,7 @@ productsRoutes.get(
   celebrate({
     [Segments.QUERY]: searchProductSchema,
   }),
-  asyncHandler(ProductsController.search),
+  asyncHandler<null, null, null, ProductQueryParams>(ProductsController.search),
 )
 productsRoutes.get('/products/:id', asyncHandler(ProductsController.getById))
 productsRoutes.post(

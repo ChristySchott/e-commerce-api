@@ -12,6 +12,10 @@ export interface Product {
   isActive: boolean
 }
 
+export interface ProductQueryParams {
+  categoryId: string
+}
+
 export const newProductSchema = Joi.object().keys({
   name: Joi.string().trim().min(3).required(),
   description: Joi.string().trim().allow(null).default(null),
