@@ -10,6 +10,7 @@ export default defineConfig([
   tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
   {
+    ignores: ['lib'],
     rules: {
       'no-console': 'warn',
       'no-debugger': 'error',
