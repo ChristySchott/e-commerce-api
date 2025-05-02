@@ -17,3 +17,4 @@ authRoutes.post(
   celebrate({ [Segments.BODY]: authRecoverySchema }),
   asyncHandler(AuthController.recovery),
 )
+authRoutes.post('/auth/sigin', asyncHandler(AuthController.sigin))

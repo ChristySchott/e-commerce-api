@@ -7,10 +7,7 @@ import { UserService } from '../services/user.service.js'
 
 export const auth = (app: Express) => {
   app.use(async (req: Request, res: Response, next: NextFunction) => {
-    if (
-      req.method === 'POST' &&
-      (req.url.startsWith('/auth/login') || req.url.startsWith('/auth/recovery'))
-    ) {
+    if (isRouteUnauthenticated(req)) {
       return next()
     }
 
@@ -36,4 +33,10 @@ export const auth = (app: Express) => {
 
     next(new UnauthorizedError())
   })
+
+  const unauthenticatedRoutes: string[] = ['/auth/login', '/auth/recovery', '/auth/sigin']
+
+  const isRouteUnauthenticated = (req: Request): boolean => {
+    return req.method === 'POST' && unauthenticatedRoutes.some((route) => req.url.startsWith(route))
+  }
 }

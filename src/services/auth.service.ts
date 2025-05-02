@@ -9,6 +9,7 @@ import {
   getAuth as getFirebaseAuth,
   UserCredential,
   sendPasswordResetEmail,
+  signInAnonymously,
 } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
 
@@ -39,6 +40,10 @@ export class AuthService {
       }
       throw err
     })
+  }
+
+  async sigin(): Promise<UserCredential> {
+    return signInAnonymously(getFirebaseAuth())
   }
 
   async update(id: string, user: User): Promise<void> {

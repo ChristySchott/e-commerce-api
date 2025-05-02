@@ -19,4 +19,13 @@ export class AuthController {
     await new AuthService().recovery(email)
     res.end()
   }
+
+  static async sigin(req: Request, res: Response) {
+    const userRecord = await new AuthService().sigin()
+    const token = await userRecord.user.getIdToken(true)
+
+    res.send({
+      token,
+    })
+  }
 }
