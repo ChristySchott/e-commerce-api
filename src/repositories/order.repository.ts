@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { CollectionReference, getFirestore, Query } from 'firebase-admin/firestore'
 
 import { Order, OrderQueryParams, orderConverter } from '../models/order.model.js'
+import { orderItemConverter } from '../models/order-item.model.js'
 
 export class OrderRepository {
   private collection: CollectionReference<Order>
@@ -41,6 +42,16 @@ export class OrderRepository {
   }
 
   async save(order: Order): Promise<void> {
-    await this.collection.add(order)
+    const batch = getFirestore().batch()
+
+    const orderRef = this.collection.doc()
+    batch.create(orderRef, order)
+
+    const itemsRef = orderRef.collection('items').withConverter(orderItemConverter).doc()
+    for (const item of order.items) {
+      batch.create(itemsRef, item)
+    }
+
+    await batch.commit()
   }
 }
