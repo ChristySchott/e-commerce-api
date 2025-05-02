@@ -55,8 +55,6 @@ export class OrderService {
       item.product = product
     }
 
-    order.date = new Date()
-
     await this.orderRepository.save(order)
   }
 }

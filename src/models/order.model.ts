@@ -4,6 +4,7 @@ import {
   DocumentData,
   QueryDocumentSnapshot,
   Timestamp,
+  FieldValue,
 } from 'firebase-admin/firestore'
 
 import { Company } from './company.model.js'
@@ -116,7 +117,7 @@ export const orderConverter: FirestoreDataConverter<Order> = {
       uf: order.address.uf,
     },
     taxpayerId: order.taxpayerId,
-    date: order.date instanceof Date ? Timestamp.fromDate(order.date) : order.date,
+    date: FieldValue.serverTimestamp(),
     isDelivery: order.isDelivery,
     deliveryFee: order.company.deliveryFee,
     paymentMethod: {
