@@ -23,3 +23,5 @@ lib/
 
 # Ignore firebase files
 firebase-adminsdk.json
+firebase.json
+.firebaserc
