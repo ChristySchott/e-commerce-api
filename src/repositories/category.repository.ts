@@ -1,38 +1,25 @@
 import { CollectionReference, getFirestore } from 'firebase-admin/firestore'
 
-import { Category } from '../models/category.model.js'
+import { Category, categoryConverter } from '../models/category.model.js'
 
 export class CategoryRepository {
-  private collection: CollectionReference
+  private collection: CollectionReference<Category>
 
   constructor() {
-    this.collection = getFirestore().collection('categories')
+    this.collection = getFirestore().collection('categories').withConverter(categoryConverter)
   }
 
   async getAll(): Promise<Category[]> {
     const snapshot = await this.collection.get()
-
-    const categories = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Category[]
-
-    return categories
+    return snapshot.docs.map((doc) => doc.data())
   }
 
   async getById(id: string): Promise<Category | null> {
     const doc = await this.collection.doc(id).get()
-
-    if (!doc.exists) {
-      return null
-    }
-
-    const category = { id: doc.id, ...doc.data() } as Category
-
-    return category
+    return doc.data() ?? null
   }
 
-  async save(category: Omit<Category, 'id'>): Promise<void> {
+  async save(category: Category): Promise<void> {
     await this.collection.add(category)
   }
 
@@ -41,6 +28,6 @@ export class CategoryRepository {
   }
 
   async delete(id: string): Promise<void> {
-    this.collection.doc(id).delete()
+    await this.collection.doc(id).delete()
   }
 }
