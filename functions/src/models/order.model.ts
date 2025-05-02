@@ -1,4 +1,5 @@
 import { Joi } from 'celebrate'
+import { validator } from 'cpf-cnpj-validator'
 import {
   FirestoreDataConverter,
   DocumentData,
@@ -70,6 +71,8 @@ export interface OrderQueryParams {
   status?: OrderStatus
 }
 
+const documentValidator = Joi.extend(validator)
+
 export const newOrderSchema = Joi.object().keys({
   company: Joi.object()
     .keys({
@@ -83,7 +86,7 @@ export const newOrderSchema = Joi.object().keys({
     otherwise: Joi.object().only().allow(null).default(null),
   }),
   taxpayerId: Joi.alternatives()
-    .try(Joi.string().length(11).required(), Joi.string().length(14).required(), Joi.valid(null))
+    .try(documentValidator.document().cpf(), documentValidator.document().cnpj(), Joi.valid(null))
     .default(null),
   isDelivery: Joi.boolean().required(),
   deliveryFee: Joi.number().min(0).required(),
