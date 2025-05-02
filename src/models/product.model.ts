@@ -1,8 +1,13 @@
 import { Joi } from 'celebrate'
+import {
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+} from 'firebase-admin/firestore'
 
 import { Category } from './category.model.js'
 
-export interface Product {
+export class Product {
   id: string
   name: string
   description: string
@@ -10,6 +15,16 @@ export interface Product {
   image: string
   category: Category
   isActive: boolean
+
+  constructor(data: Product) {
+    this.id = data.id
+    this.name = data.name
+    this.description = data.description ?? null
+    this.price = data.price
+    this.image = data.image ?? null
+    this.category = new Category(data.category)
+    this.isActive = data.isActive ?? true
+  }
 }
 
 export interface ProductQueryParams {
@@ -48,3 +63,24 @@ export const updateProductSchema = Joi.object().keys({
 export const searchProductSchema = Joi.object().keys({
   categoryId: Joi.string().trim().required(),
 })
+
+export const productConverter: FirestoreDataConverter<Product> = {
+  toFirestore: (product: Product): DocumentData => ({
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    image: product.image,
+    category: {
+      id: product.category.id,
+      description: product.category.description,
+      isActive: product.category.isActive,
+    },
+    isActive: product.isActive,
+  }),
+  fromFirestore: (snapshot: QueryDocumentSnapshot): Product => {
+    return new Product({
+      id: snapshot.id,
+      ...(snapshot.data() as Omit<Product, 'id'>),
+    })
+  },
+}
