@@ -40,7 +40,8 @@ This project uses **Cloud Firestore**, a NoSQL document database provided by Fir
 ## 📂 Project Structure
 
 ```text
-src/
+functions/
+└── src/
 ├── controllers/       # Route handlers (controllers)
 ├── routes/            # API route definitions
 ├── services/          # Business logic layer
