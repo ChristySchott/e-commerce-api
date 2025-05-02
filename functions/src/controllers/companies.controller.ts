@@ -4,11 +4,11 @@ import { Company } from '../models/company.model.js'
 import { CompanyService } from '../services/company.service.js'
 
 export class CompaniesController {
-  static async getAll(req: Request, res: Response) {
+  static async getAll(req: Request, res: Response<Company[]>) {
     res.send(await new CompanyService().getAll())
   }
 
-  static async getById(req: Request<{ id: string }>, res: Response) {
+  static async getById(req: Request<{ id: string }>, res: Response<Company>) {
     const companyId = req.params.id
 
     res.send(await new CompanyService().getById(companyId))

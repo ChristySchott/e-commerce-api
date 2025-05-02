@@ -2,19 +2,20 @@ import { Request, Response } from 'express'
 
 import { Order, OrderQueryParams } from '../models/order.model.js'
 import { OrderService } from '../services/order.service.js'
+import { OrderItem } from '../models/order-item.model.js'
 
 export class OrdersController {
-  static async search(req: Request<null, null, null, OrderQueryParams>, res: Response) {
+  static async search(req: Request<null, null, null, OrderQueryParams>, res: Response<Order[]>) {
     res.send(await new OrderService().search(req.query))
   }
 
-  static async getItemsByOrderId(req: Request<{ id: string }>, res: Response) {
+  static async getItemsByOrderId(req: Request<{ id: string }>, res: Response<OrderItem[]>) {
     const orderId = req.params.id
 
     res.send(await new OrderService().getItemsByOrderId(orderId))
   }
 
-  static async getById(req: Request<{ id: string }>, res: Response) {
+  static async getById(req: Request<{ id: string }>, res: Response<Order>) {
     const orderId = req.params.id
 
     res.send(await new OrderService().getById(orderId))

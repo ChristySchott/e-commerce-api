@@ -8,12 +8,12 @@ export class ProductsController {
     res.send(await new ProductService().getAll())
   }
 
-  static async search(req: Request<null, null, null, ProductQueryParams>, res: Response) {
+  static async search(req: Request<null, null, null, ProductQueryParams>, res: Response<Product[]>) {
     const categoryId = req.query.categoryId
     res.send(await new ProductService().search(categoryId))
   }
 
-  static async getById(req: Request<{ id: string }>, res: Response) {
+  static async getById(req: Request<{ id: string }>, res: Response<Product>) {
     const productId = req.params.id
 
     res.send(await new ProductService().getById(productId))
