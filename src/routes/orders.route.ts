@@ -12,6 +12,7 @@ ordersRoutes.get(
   celebrate({ [Segments.QUERY]: searchOrderSchema }),
   asyncHandler<null, null, null, OrderQueryParams>(OrdersController.search),
 )
+ordersRoutes.get('/orders/:id/items', asyncHandler(OrdersController.getItemsByOrderId))
 ordersRoutes.get('/orders/:id', asyncHandler(OrdersController.getById))
 ordersRoutes.post(
   '/orders',

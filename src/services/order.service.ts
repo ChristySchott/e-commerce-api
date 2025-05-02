@@ -4,6 +4,7 @@ import { OrderRepository } from '../repositories/order.repository.js'
 import { CompanyRepository } from '../repositories/company.repository.js'
 import { ProductRepository } from '../repositories/product.repository.js'
 import { PaymentMethodRepository } from '../repositories/payment-method.repository.js'
+import { OrderItem } from '../models/order-item.model.js'
 
 export class OrderService {
   private orderRepository: OrderRepository
@@ -30,6 +31,13 @@ export class OrderService {
     }
 
     return order
+  }
+
+  async getItemsByOrderId(id: string): Promise<OrderItem[]> {
+    await this.getById(id)
+
+    const orderItems = await this.orderRepository.getItemsByOrderId(id)
+    return orderItems
   }
 
   async save(order: Order): Promise<void> {

@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { CollectionReference, getFirestore, Query } from 'firebase-admin/firestore'
 
 import { Order, OrderQueryParams, orderConverter } from '../models/order.model.js'
-import { orderItemConverter } from '../models/order-item.model.js'
+import { OrderItem, orderItemConverter } from '../models/order-item.model.js'
 
 export class OrderRepository {
   private collection: CollectionReference<Order>
@@ -36,6 +36,12 @@ export class OrderRepository {
     return snapshot.docs.map((doc) => doc.data())
   }
 
+  async getItemsByOrderId(id: string): Promise<OrderItem[]> {
+    const itemsRef = this.collection.doc(id).collection('items').withConverter(orderItemConverter)
+    const snapshot = await itemsRef.get()
+    return snapshot.docs.map((doc) => doc.data())
+  }
+
   async getById(id: string): Promise<Order | null> {
     const doc = await this.collection.doc(id).get()
     return doc.data() ?? null
@@ -47,9 +53,9 @@ export class OrderRepository {
     const orderRef = this.collection.doc()
     batch.create(orderRef, order)
 
-    const itemsRef = orderRef.collection('items').withConverter(orderItemConverter).doc()
+    const itemsRef = orderRef.collection('items').withConverter(orderItemConverter)
     for (const item of order.items) {
-      batch.create(itemsRef, item)
+      batch.create(itemsRef.doc(), item)
     }
 
     await batch.commit()

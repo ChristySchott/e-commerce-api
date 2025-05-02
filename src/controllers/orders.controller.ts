@@ -8,6 +8,12 @@ export class OrdersController {
     res.send(await new OrderService().search(req.query))
   }
 
+  static async getItemsByOrderId(req: Request<{ id: string }>, res: Response) {
+    const orderId = req.params.id
+
+    res.send(await new OrderService().getItemsByOrderId(orderId))
+  }
+
   static async getById(req: Request<{ id: string }>, res: Response) {
     const orderId = req.params.id
 
