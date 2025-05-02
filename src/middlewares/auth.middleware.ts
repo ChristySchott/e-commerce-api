@@ -4,6 +4,7 @@ import { DecodedIdToken, getAuth } from 'firebase-admin/auth'
 import { ForbiddenError } from '../errors/forbidden.error.js'
 import { UnauthorizedError } from '../errors/unauthorized.error.js'
 import { UserService } from '../services/user.service.js'
+import { isRouteUnauthenticated } from '../utils/auth-utils.js'
 
 export const auth = (app: Express) => {
   app.use(async (req: Request, res: Response, next: NextFunction) => {
@@ -16,6 +17,10 @@ export const auth = (app: Express) => {
     if (token) {
       try {
         const decodeIdToken: DecodedIdToken = await getAuth().verifyIdToken(token, true)
+
+        if (decodeIdToken.firebase.sign_in_provider === 'anonymous') {
+          return next()
+        }
 
         const user = await new UserService().getById(decodeIdToken.uid)
 
@@ -33,10 +38,4 @@ export const auth = (app: Express) => {
 
     next(new UnauthorizedError())
   })
-
-  const unauthenticatedRoutes: string[] = ['/auth/login', '/auth/recovery', '/auth/sigin']
-
-  const isRouteUnauthenticated = (req: Request): boolean => {
-    return req.method === 'POST' && unauthenticatedRoutes.some((route) => req.url.startsWith(route))
-  }
 }
