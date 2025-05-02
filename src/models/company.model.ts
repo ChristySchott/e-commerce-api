@@ -1,9 +1,14 @@
 import { Joi } from 'celebrate'
 import { validator } from 'cpf-cnpj-validator'
+import {
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+} from 'firebase-admin/firestore'
 
 import { phoneRegexPattern } from '../utils/regex-utils.js'
 
-export interface Company {
+export class Company {
   id: string
   logo: string
   document: string
@@ -15,6 +20,20 @@ export interface Company {
   location: string
   deliveryFee: number
   isActive: boolean
+
+  constructor(data: Company) {
+    this.id = data.id
+    this.logo = data.logo
+    this.document = data.document
+    this.corporateName = data.corporateName
+    this.tradeName = data.tradeName
+    this.phone = data.phone
+    this.businessHours = data.businessHours
+    this.address = data.address
+    this.location = data.location
+    this.deliveryFee = data.deliveryFee
+    this.isActive = data.isActive ?? true
+  }
 }
 
 const documentValidator = Joi.extend(validator)
@@ -52,3 +71,24 @@ export const updateCompanySchema = Joi.object().keys({
   deliveryFee: Joi.number().required(),
   isActive: Joi.boolean().required(),
 })
+
+export const companyConverter: FirestoreDataConverter<Company> = {
+  toFirestore: (company: Company): DocumentData => ({
+    logo: company.logo,
+    document: company.document,
+    corporateName: company.corporateName,
+    tradeName: company.tradeName,
+    phone: company.phone,
+    businessHours: company.businessHours,
+    address: company.address,
+    location: company.location,
+    deliveryFee: company.deliveryFee,
+    isActive: company.isActive,
+  }),
+  fromFirestore: (snapshot: QueryDocumentSnapshot): Company => {
+    return new Company({
+      id: snapshot.id,
+      ...(snapshot.data() as Omit<Company, 'id'>),
+    })
+  },
+}
