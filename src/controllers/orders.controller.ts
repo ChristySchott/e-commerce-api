@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 
-import { Order } from '../models/order.model.js'
+import { Order, OrderQueryParams } from '../models/order.model.js'
 import { OrderService } from '../services/order.service.js'
 
 export class OrdersController {
-  static async getAll(req: Request, res: Response) {
-    res.send(await new OrderService().getAll())
+  static async search(req: Request<null, null, null, OrderQueryParams>, res: Response) {
+    res.send(await new OrderService().search(req.query))
   }
 
   static async getById(req: Request<{ id: string }>, res: Response) {

@@ -1,4 +1,4 @@
-import { Order } from '../models/order.model.js'
+import { Order, OrderQueryParams } from '../models/order.model.js'
 import { NotFoundError } from '../errors/not-found.error.js'
 import { OrderRepository } from '../repositories/order.repository.js'
 import { CompanyRepository } from '../repositories/company.repository.js'
@@ -18,8 +18,8 @@ export class OrderService {
     this.productRepository = new ProductRepository()
   }
 
-  async getAll(): Promise<Order[]> {
-    return this.orderRepository.getAll()
+  async search(query: OrderQueryParams): Promise<Order[]> {
+    return this.orderRepository.search(query)
   }
 
   async getById(id: string): Promise<Order> {
@@ -54,6 +54,8 @@ export class OrderService {
 
       item.product = product
     }
+
+    order.date = new Date()
 
     await this.orderRepository.save(order)
   }

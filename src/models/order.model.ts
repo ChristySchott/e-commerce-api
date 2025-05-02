@@ -29,6 +29,13 @@ export enum OrderStatus {
   cancelled = 'cancelled',
 }
 
+export interface OrderQueryParams {
+  companyId?: string
+  startDate?: Date
+  endDate?: Date
+  status?: OrderStatus
+}
+
 export const newOrderSchema = Joi.object().keys({
   company: Joi.object()
     .keys({
@@ -54,4 +61,13 @@ export const newOrderSchema = Joi.object().keys({
   items: Joi.array().min(1).items(orderItemSchema).required(),
   status: Joi.string().only().allow(OrderStatus.pending).default(OrderStatus.pending),
   notes: Joi.string().trim().allow(null).default(null),
+})
+
+export const searchOrderSchema = Joi.object().keys({
+  companyId: Joi.string().trim(),
+  startDate: Joi.date(),
+  endDate: Joi.date(),
+  status: Joi.string()
+    .only()
+    .allow(...Object.values(OrderStatus)),
 })

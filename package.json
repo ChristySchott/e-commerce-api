@@ -19,6 +19,7 @@
   "dependencies": {
     "celebrate": "^15.0.3",
     "cpf-cnpj-validator": "^1.0.3",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-async-handler": "^1.2.0",
