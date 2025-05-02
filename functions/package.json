@@ -16,8 +16,6 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "firebase-admin": "^13.3.0",
-    "firebase-functions": "^6.0.1",
     "celebrate": "^15.0.3",
     "cpf-cnpj-validator": "^1.0.3",
     "dayjs": "^1.11.13",
@@ -25,23 +23,25 @@
     "express": "^5.1.0",
     "express-async-handler": "^1.2.0",
     "file-type": "^20.5.0",
-    "firebase": "^11.6.1"
+    "firebase": "^11.6.1",
+    "firebase-admin": "^13.3.0",
+    "firebase-functions": "^6.3.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.15.3",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
     "eslint": "^9.25.1",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-import": "^2.25.4",
-    "firebase-functions-test": "^3.1.0",
-    "typescript": "^5.8.3",
-    "@eslint/js": "^9.25.1",
-    "@types/express": "^5.0.1",
-    "@types/node": "^22.15.3",
     "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-prettier": "^5.2.6",
+    "firebase-functions-test": "^3.1.0",
     "globals": "^16.0.0",
     "prettier": "3.5.3",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.1"
   },
   "private": true
