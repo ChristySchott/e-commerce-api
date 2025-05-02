@@ -14,7 +14,7 @@ export class CompaniesController {
     res.send(await new CompanyService().getById(companyId))
   }
 
-  static async save(req: Request<{ id: string }, null, Omit<Company, 'id'>>, res: Response) {
+  static async save(req: Request<{ id: string }, null, Company>, res: Response) {
     const company = req.body
 
     await new CompanyService().save(company)

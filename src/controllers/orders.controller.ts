@@ -14,7 +14,7 @@ export class OrdersController {
     res.send(await new OrderService().getById(orderId))
   }
 
-  static async save(req: Request<{ id: string }, null, Omit<Order, 'id'>>, res: Response) {
+  static async save(req: Request<{ id: string }, null, Order>, res: Response) {
     const order = req.body
 
     await new OrderService().save(order)

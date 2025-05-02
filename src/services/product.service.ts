@@ -35,7 +35,7 @@ export class ProductService {
     return product
   }
 
-  async save(product: Omit<Product, 'id'>): Promise<void> {
+  async save(product: Product): Promise<void> {
     const category = await this.getCategoryById(product.category.id)
     product.category = category
 

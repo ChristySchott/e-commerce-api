@@ -23,7 +23,7 @@ export class PaymentMethodService {
     return paymentMethod
   }
 
-  async save(paymentMethod: Omit<PaymentMethod, 'id'>): Promise<void> {
+  async save(paymentMethod: PaymentMethod): Promise<void> {
     await this.paymentMethodRepository.save(paymentMethod)
   }
 

@@ -32,7 +32,7 @@ export class OrderService {
     return order
   }
 
-  async save(order: Omit<Order, 'id'>): Promise<void> {
+  async save(order: Order): Promise<void> {
     const company = await this.companyRepository.getById(order.company.id)
     if (!company) {
       throw new NotFoundError('Company not found')

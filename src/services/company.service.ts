@@ -27,7 +27,7 @@ export class CompanyService {
     return company
   }
 
-  async save(company: Omit<Company, 'id'>): Promise<void> {
+  async save(company: Company): Promise<void> {
     const logoUrl = await this.uploadFileService.upload(company.logo)
     company.logo = logoUrl
 

@@ -27,7 +27,7 @@ export class CategoryService {
     return category
   }
 
-  async save(category: Omit<Category, 'id'>): Promise<void> {
+  async save(category: Category): Promise<void> {
     await this.categoryRepository.save(category)
   }
 

@@ -19,7 +19,7 @@ export class ProductsController {
     res.send(await new ProductService().getById(productId))
   }
 
-  static async save(req: Request<{ id: string }, null, Omit<Product, 'id'>>, res: Response) {
+  static async save(req: Request<{ id: string }, null, Product>, res: Response) {
     const product = req.body
 
     await new ProductService().save(product)

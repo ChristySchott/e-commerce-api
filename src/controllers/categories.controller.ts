@@ -14,7 +14,7 @@ export class CategoriesController {
     res.send(await new CategoryService().getById(categoryId))
   }
 
-  static async save(req: Request<{ id: string }, null, Omit<Category, 'id'>>, res: Response) {
+  static async save(req: Request<{ id: string }, null, Category>, res: Response) {
     const category = req.body
 
     await new CategoryService().save(category)

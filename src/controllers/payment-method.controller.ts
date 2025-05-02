@@ -14,7 +14,7 @@ export class PaymentMethodsController {
     res.send(await new PaymentMethodService().getById(paymentMethodId))
   }
 
-  static async save(req: Request<{ id: string }, null, Omit<PaymentMethod, 'id'>>, res: Response) {
+  static async save(req: Request<{ id: string }, null, PaymentMethod>, res: Response) {
     const paymentMethod = req.body
 
     await new PaymentMethodService().save(paymentMethod)
