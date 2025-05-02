@@ -15,7 +15,7 @@ export class OrdersController {
   }
 
   static async save(req: Request<{ id: string }, null, Order>, res: Response) {
-    const order = req.body
+    const order = new Order(req.body)
 
     await new OrderService().save(order)
     res.status(201).end()

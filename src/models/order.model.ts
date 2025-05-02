@@ -26,6 +26,8 @@ export class Order {
   items: OrderItem[]
   status: OrderStatus
   notes: string
+  subtotal: number
+  total: number
 
   constructor(data: Order) {
     this.id = data.id
@@ -40,6 +42,16 @@ export class Order {
     this.items = data.items?.map((item: OrderItem) => new OrderItem(item))
     this.status = data.status ?? OrderStatus.pending
     this.notes = data.notes
+    this.subtotal = data.subtotal
+    this.total = data.total
+  }
+
+  getSubtotal(): number {
+    return this.items?.map((item) => item.getTotal()).reduce((total, next) => total + next, 0) ?? 0
+  }
+
+  getTotal(): number {
+    return this.getSubtotal() + this.deliveryFee
   }
 }
 
@@ -119,13 +131,15 @@ export const orderConverter: FirestoreDataConverter<Order> = {
     taxpayerId: order.taxpayerId,
     date: FieldValue.serverTimestamp(),
     isDelivery: order.isDelivery,
-    deliveryFee: order.company.deliveryFee,
+    deliveryFee: order.deliveryFee,
     paymentMethod: {
       id: order.paymentMethod.id,
       description: order.paymentMethod.description,
     },
     status: order.status,
     notes: order.notes,
+    subtotal: order.getSubtotal(),
+    total: order.getTotal(),
   }),
   fromFirestore: (snapshot: QueryDocumentSnapshot): Order => {
     return new Order({

@@ -11,7 +11,7 @@ export class Product {
   id: string
   name: string
   description: string
-  price: string
+  price: number
   image: string
   category: Category
   isActive: boolean
@@ -22,7 +22,7 @@ export class Product {
     this.description = data.description ?? null
     this.price = data.price
     this.image = data.image ?? null
-    this.category = new Category(data.category)
+    this.category = new Category(data.category || {})
     this.isActive = data.isActive ?? true
   }
 }
