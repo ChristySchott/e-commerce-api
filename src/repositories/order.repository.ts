@@ -33,10 +33,13 @@ export class OrderRepository {
 
     const snapshot = await query.get()
 
-    const orders = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Order[]
+    const orders = snapshot.docs.map(
+      (doc) =>
+        new Order({
+          id: doc.id,
+          ...doc.data(),
+        } as Order),
+    )
 
     return orders
   }

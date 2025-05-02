@@ -1,4 +1,5 @@
 import { Joi } from 'celebrate'
+import { Timestamp } from 'firebase-admin/firestore'
 
 import { Company } from './company.model.js'
 import { Customer, customerSchema } from './customer.model.js'
@@ -6,7 +7,7 @@ import { Address, addressSchema } from './address.model.js'
 import { PaymentMethod } from './payment-method.model.js'
 import { OrderItem, orderItemSchema } from './order-item.model.js'
 
-export interface Order {
+export class Order {
   id: string
   company: Company
   customer: Customer
@@ -19,6 +20,21 @@ export interface Order {
   items: OrderItem[]
   status: OrderStatus
   notes: string
+
+  constructor(data: Order) {
+    this.id = data.id
+    this.company = data.company
+    this.customer = data.customer
+    this.address = data.address
+    this.taxpayerId = data.taxpayerId
+    this.date = data.date instanceof Timestamp ? data.date.toDate() : data.date
+    this.isDelivery = data.isDelivery
+    this.deliveryFee = data.deliveryFee
+    this.paymentMethod = data.paymentMethod
+    this.items = data.items
+    this.status = data.status ?? OrderStatus.pending
+    this.notes = data.notes
+  }
 }
 
 export enum OrderStatus {
