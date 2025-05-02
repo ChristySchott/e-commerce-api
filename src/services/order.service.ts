@@ -30,11 +30,19 @@ export class OrderService {
       throw new NotFoundError('Order not found')
     }
 
+    const orderItems = await this.orderRepository.getItemsByOrderId(id)
+
+    order.items = orderItems
+
     return order
   }
 
   async getItemsByOrderId(id: string): Promise<OrderItem[]> {
-    await this.getById(id)
+    const order = await this.orderRepository.getById(id)
+
+    if (!order) {
+      throw new NotFoundError('Order not found')
+    }
 
     const orderItems = await this.orderRepository.getItemsByOrderId(id)
     return orderItems
