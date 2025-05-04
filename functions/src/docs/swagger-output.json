@@ -1,0 +1,1680 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "E-Commerce API",
+    "description": "This is a RESTful API developed to manage an E-Commerce system. It provides endpoints for authentication, company management, product categories, product catalog, payment methods, and order processing.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5001/e-commerce-185c0/us-central1/api",
+      "description": "Dev"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "User authentication"
+    },
+    {
+      "name": "Users",
+      "description": "User management"
+    },
+    {
+      "name": "Companies",
+      "description": "Company management"
+    },
+    {
+      "name": "Categories",
+      "description": "Product category management"
+    },
+    {
+      "name": "Products",
+      "description": "Company product catalog"
+    },
+    {
+      "name": "Payment Methods",
+      "description": "Payment method management"
+    },
+    {
+      "name": "Orders",
+      "description": "Order processing and management"
+    }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User login",
+        "description": "Authenticate a user and retrieve a JWT token.",
+        "responses": {
+          "200": {
+            "description": "Authentication successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/recovery": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Password recovery",
+        "description": "Send a password recovery email to the user.",
+        "responses": {
+          "204": {
+            "description": "Recovery email sent"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/recovery"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/sigin": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Sign in anonymously",
+        "description": "Generate an anonymous access token for testing or public access.",
+        "responses": {
+          "200": {
+            "description": "Anonymous authentication successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retrieve all users",
+        "description": "Fetches all users registered in the system.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create a new user",
+        "description": "Registers a new user in the system.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addUser"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retrieve a user by ID",
+        "description": "Fetches a specific user using the user ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user information",
+        "description": "Updates information for a specific user.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateUser"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete a user",
+        "description": "Deletes a user by ID. This action is irreversible.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/companies": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "Get all companies",
+        "description": "Retrieve a list of all registered companies.",
+        "responses": {
+          "200": {
+            "description": "List of companies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Company"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "Create a new company",
+        "description": "Register a new company in the system.",
+        "responses": {
+          "201": {
+            "description": "Company created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addCompany"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies/{id}": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "Get company by ID",
+        "description": "Retrieve a specific company using its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Company ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Company details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Company"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Companies"
+        ],
+        "summary": "Update a company",
+        "description": "Update company data by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Company ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Company updated successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateCompany"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Get all categories",
+        "description": "Retrieve a list of all product categories.",
+        "responses": {
+          "200": {
+            "description": "List of categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Category"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Create a new category",
+        "description": "Add a new product category.",
+        "responses": {
+          "201": {
+            "description": "Category created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addCategory"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Get category by ID",
+        "description": "Retrieve a single category by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Category ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Update a category",
+        "description": "Update an existing category by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Category ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Category updated successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateCategory"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Delete a category",
+        "description": "Delete a category by ID.<br><br><b>Note:</b> <i>This action is irreversible.</i>",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Category ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Category deleted successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Retrieve all products",
+        "description": "Fetches all registered products.",
+        "responses": {
+          "200": {
+            "description": "List of products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Create a new product",
+        "description": "Register a new product.",
+        "responses": {
+          "201": {
+            "description": "Product created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addProduct"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/search": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Search products by category",
+        "description": "Search products filtered by category ID.",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "description": "Category ID to filter products",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filtered list of products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Retrieve a product by ID",
+        "description": "Fetch a specific product using its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Product ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Update a product",
+        "description": "Update a specific product using its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Product ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Product updated successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateProduct"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Delete a product",
+        "description": "Delete a product by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Product ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Product deleted successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/payment-methods": {
+      "get": {
+        "tags": [
+          "Payment Methods"
+        ],
+        "summary": "Get all payment methods",
+        "description": "Retrieve all available payment methods.",
+        "responses": {
+          "200": {
+            "description": "List of payment methods",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentMethod"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Payment Methods"
+        ],
+        "summary": "Create a new payment method",
+        "description": "Add a new payment method to the system.",
+        "responses": {
+          "201": {
+            "description": "Payment method created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addPaymentMethod"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payment-methods/{id}": {
+      "get": {
+        "tags": [
+          "Payment Methods"
+        ],
+        "summary": "Get payment method by ID",
+        "description": "Retrieve a specific payment method by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Payment method ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment method data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentMethod"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Payment Methods"
+        ],
+        "summary": "Update a payment method",
+        "description": "Update the details of an existing payment method.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Payment method ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Payment method updated successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updatePaymentMethod"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Payment Methods"
+        ],
+        "summary": "Delete a payment method",
+        "description": "Remove a payment method by its ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Payment method ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Payment method deleted successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/orders": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Search for orders",
+        "description": "Search for orders using optional filters such as companyId, date range, and status.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/companyId"
+          },
+          {
+            "$ref": "#/components/parameters/startDate"
+          },
+          {
+            "$ref": "#/components/parameters/endDate"
+          },
+          {
+            "$ref": "#/components/parameters/orderStatus"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of filtered orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/addOrder"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Create a new order",
+        "description": "Create a new order with customer, address, payment method, and items.",
+        "responses": {
+          "201": {
+            "description": "Order created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addOrder"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}/items": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get order items",
+        "description": "Retrieve all items from a specific order.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Order ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of order items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "product": {
+                        "$ref": "#/components/schemas/Product"
+                      },
+                      "quantity": {
+                        "type": "number",
+                        "example": 2
+                      },
+                      "note": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get order by ID",
+        "description": "Retrieve order details by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Order ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addOrder"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/orders/{id}/status": {
+      "patch": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Update order status",
+        "description": "Update the status of a specific order.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Order ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Order status updated successfully"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateOrderStatus"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@mail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "123456"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "recovery": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@mail.com"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "2mkre4j5gPo0BFGl5pyi"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "johndoe@mail.com"
+          }
+        }
+      },
+      "addUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "johndoe@mail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "123456"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      },
+      "updateUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "johndoe@mail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "654321"
+          }
+        },
+        "required": [
+          "name",
+          "email"
+        ]
+      },
+      "addCompany": {
+        "type": "object",
+        "properties": {
+          "logo": {
+            "type": "string",
+            "example": "...base64..."
+          },
+          "document": {
+            "type": "string",
+            "example": "15647055000165"
+          },
+          "corporateName": {
+            "type": "string",
+            "example": "Jornada Dev Media Digital Solutions Ltda"
+          },
+          "tradeName": {
+            "type": "string",
+            "example": "Dev Journey"
+          },
+          "phone": {
+            "type": "string",
+            "example": "64999999999"
+          },
+          "businessHours": {
+            "type": "string",
+            "example": "Mon to Fri from 08:00 to 18:00"
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Future St, Downtown"
+          },
+          "location": {
+            "type": "string",
+            "example": "https://maps.app.goo.gl/example"
+          },
+          "deliveryFee": {
+            "type": "number",
+            "example": 9.99
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "logo",
+          "document",
+          "corporateName",
+          "tradeName",
+          "phone",
+          "businessHours",
+          "address",
+          "location",
+          "deliveryFee"
+        ]
+      },
+      "updateCompany": {
+        "type": "object",
+        "properties": {
+          "logo": {
+            "type": "string",
+            "example": "...base64 or URI..."
+          },
+          "document": {
+            "type": "string",
+            "example": "15647055000165"
+          },
+          "corporateName": {
+            "type": "string",
+            "example": "Jornada Dev Media Digital Solutions Ltda"
+          },
+          "tradeName": {
+            "type": "string",
+            "example": "Dev Journey"
+          },
+          "phone": {
+            "type": "string",
+            "example": "64999999999"
+          },
+          "businessHours": {
+            "type": "string",
+            "example": "Mon to Fri from 08:00 to 18:00"
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Future St, Downtown"
+          },
+          "location": {
+            "type": "string",
+            "example": "https://maps.app.goo.gl/example"
+          },
+          "deliveryFee": {
+            "type": "number",
+            "example": 9.99
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "logo",
+          "document",
+          "corporateName",
+          "tradeName",
+          "phone",
+          "businessHours",
+          "address",
+          "location",
+          "deliveryFee",
+          "isActive"
+        ]
+      },
+      "addCategory": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Imported"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "description"
+        ]
+      },
+      "updateCategory": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "National"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "description",
+          "isActive"
+        ]
+      },
+      "addProduct": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Smart TV Samsung 55'"
+          },
+          "description": {
+            "type": "string",
+            "example": "One of the best smart TVs on the market."
+          },
+          "price": {
+            "type": "number",
+            "example": 5479.99
+          },
+          "image": {},
+          "category": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "2mkre4j5gPo0BFGl5pyi"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "name",
+          "price",
+          "category"
+        ]
+      },
+      "updateProduct": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Smart TV Samsung 55'"
+          },
+          "description": {
+            "type": "string",
+            "example": "One of the best smart TVs on the market."
+          },
+          "price": {
+            "type": "number",
+            "example": 5479.99
+          },
+          "image": {},
+          "category": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "2mkre4j5gPo0BFGl5pyi"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "name",
+          "price",
+          "category",
+          "isActive"
+        ]
+      },
+      "addPaymentMethod": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Pix"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "description"
+        ]
+      },
+      "updatePaymentMethod": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Credit Card"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "description",
+          "isActive"
+        ]
+      },
+      "addOrder": {
+        "type": "object",
+        "properties": {
+          "company": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "1SBiiMrf4JUUFG57M76F"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "customer": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "John Doe"
+              },
+              "phone": {
+                "type": "string",
+                "example": "11999999999"
+              }
+            },
+            "required": [
+              "name",
+              "phone"
+            ]
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "zipcode": {
+                "type": "string",
+                "example": "75900000"
+              },
+              "street": {
+                "type": "string",
+                "example": "Xuxu Beleza St"
+              },
+              "number": {
+                "type": "string",
+                "example": "11"
+              },
+              "neighborhood": {
+                "type": "string",
+                "example": "XPTO District"
+              },
+              "complement": {
+                "type": "string",
+                "example": "Block 1, Lot 2"
+              },
+              "city": {
+                "type": "string",
+                "example": "Sampletown"
+              },
+              "state": {
+                "type": "string",
+                "example": "CA"
+              }
+            },
+            "required": [
+              "street",
+              "number",
+              "neighborhood",
+              "complement",
+              "city",
+              "state"
+            ]
+          },
+          "taxpayerId": {},
+          "isDelivery": {
+            "type": "boolean",
+            "example": true
+          },
+          "paymentMethod": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "NdmCoYl0iT3gHwhO0pyQ"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "deliveryFee": {
+            "type": "number",
+            "example": 100
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "3UfzI8CSCaK5eC0UJ8gI"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
+                },
+                "quantity": {
+                  "type": "number",
+                  "example": 1
+                },
+                "note": {}
+              },
+              "required": [
+                "product",
+                "quantity"
+              ]
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              null
+            ]
+          },
+          "notes": {}
+        },
+        "required": [
+          "company",
+          "customer",
+          "isDelivery",
+          "paymentMethod",
+          "deliveryFee",
+          "items"
+        ]
+      },
+      "updateOrderStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "delivering",
+              "completed",
+              "cancelled"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      }
+    },
+    "parameters": {
+      "companyId": {
+        "name": "companyId",
+        "in": "query",
+        "description": "Company ID",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "startDate": {
+        "name": "startDate",
+        "in": "query",
+        "description": "Start date in YYYY-MM-DD format",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "endDate": {
+        "name": "endDate",
+        "in": "query",
+        "description": "End date in YYYY-MM-DD format",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "orderStatus": {
+        "name": "status",
+        "in": "query",
+        "description": "Order status",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "approved",
+            "delivering",
+            "completed",
+            "cancelled"
+          ]
+        }
+      }
+    }
+  }
+}

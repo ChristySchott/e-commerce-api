@@ -1,4 +1,4 @@
-import express, { Express } from 'express'
+import express, { Express, Router } from 'express'
 
 import { allowAnonymousUser } from '../middlewares/allow-anonymous-user.middleware.js'
 
@@ -14,10 +14,17 @@ export const routes = (app: Express) => {
   app.use(express.json({ limit: '5mb' }))
   app.use(authRoutes)
   app.use(allowAnonymousUser)
-  app.use(usersRoutes)
-  app.use(companiesRoutes)
-  app.use(categoriesRoutes)
-  app.use(productsRoutes)
-  app.use(paymentMethodsRoutes)
-  app.use(ordersRoutes)
+
+  const authenticatedRoutes = Router()
+
+  authenticatedRoutes.use(usersRoutes)
+  authenticatedRoutes.use(companiesRoutes)
+  authenticatedRoutes.use(categoriesRoutes)
+  authenticatedRoutes.use(productsRoutes)
+  authenticatedRoutes.use(paymentMethodsRoutes)
+  authenticatedRoutes.use(ordersRoutes)
+  app.use(
+    // #swagger.security = [{ "bearerAuth": [] }]
+    authenticatedRoutes,
+  )
 }

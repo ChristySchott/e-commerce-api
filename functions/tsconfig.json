@@ -16,7 +16,8 @@
   },
   "compileOnSave": true,
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "swagger.js"  
   ],
   "exclude": [
     "**/*.spec.ts"
