@@ -1138,11 +1138,7 @@
             "type": "string",
             "example": "123456"
           }
-        },
-        "required": [
-          "email",
-          "password"
-        ]
+        }
       },
       "recovery": {
         "type": "object",
@@ -1151,10 +1147,7 @@
             "type": "string",
             "example": "user@mail.com"
           }
-        },
-        "required": [
-          "email"
-        ]
+        }
       },
       "User": {
         "type": "object",
@@ -1216,6 +1209,55 @@
           "email"
         ]
       },
+      "Company": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "abc123"
+          },
+          "logo": {
+            "type": "string",
+            "example": "...base64 or URI..."
+          },
+          "document": {
+            "type": "string",
+            "example": "15647055000165"
+          },
+          "corporateName": {
+            "type": "string",
+            "example": "Example Ltda"
+          },
+          "tradeName": {
+            "type": "string",
+            "example": "Example"
+          },
+          "phone": {
+            "type": "string",
+            "example": "11999999999"
+          },
+          "businessHours": {
+            "type": "string",
+            "example": "Mon to Fri from 08:00 to 18:00"
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Future St, Downtown"
+          },
+          "location": {
+            "type": "string",
+            "example": "https://maps.example.com"
+          },
+          "deliveryFee": {
+            "type": "number",
+            "example": 9.99
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
       "addCompany": {
         "type": "object",
         "properties": {
@@ -1229,15 +1271,15 @@
           },
           "corporateName": {
             "type": "string",
-            "example": "Jornada Dev Media Digital Solutions Ltda"
+            "example": "Example Ltda"
           },
           "tradeName": {
             "type": "string",
-            "example": "Dev Journey"
+            "example": "Example"
           },
           "phone": {
             "type": "string",
-            "example": "64999999999"
+            "example": "11999999999"
           },
           "businessHours": {
             "type": "string",
@@ -1249,7 +1291,7 @@
           },
           "location": {
             "type": "string",
-            "example": "https://maps.app.goo.gl/example"
+            "example": "https://maps.example.com"
           },
           "deliveryFee": {
             "type": "number",
@@ -1285,15 +1327,15 @@
           },
           "corporateName": {
             "type": "string",
-            "example": "Jornada Dev Media Digital Solutions Ltda"
+            "example": "Example Ltda"
           },
           "tradeName": {
             "type": "string",
-            "example": "Dev Journey"
+            "example": "Example"
           },
           "phone": {
             "type": "string",
-            "example": "64999999999"
+            "example": "11999999999"
           },
           "businessHours": {
             "type": "string",
@@ -1305,7 +1347,7 @@
           },
           "location": {
             "type": "string",
-            "example": "https://maps.app.goo.gl/example"
+            "example": "https://maps.example.com"
           },
           "deliveryFee": {
             "type": "number",
@@ -1325,9 +1367,25 @@
           "businessHours",
           "address",
           "location",
-          "deliveryFee",
-          "isActive"
+          "deliveryFee"
         ]
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "cat123"
+          },
+          "description": {
+            "type": "string",
+            "example": "Imported"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        }
       },
       "addCategory": {
         "type": "object",
@@ -1358,9 +1416,54 @@
           }
         },
         "required": [
-          "description",
-          "isActive"
+          "description"
         ]
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "prod123"
+          },
+          "name": {
+            "type": "string",
+            "example": "Smart TV Samsung 55'"
+          },
+          "description": {
+            "type": "string",
+            "example": "One of the best smart TVs on the market."
+          },
+          "price": {
+            "type": "number",
+            "example": 5479.99
+          },
+          "image": {
+            "type": "string",
+            "example": "https://example.com/image.png"
+          },
+          "category": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "cat123"
+              },
+              "description": {
+                "type": "string",
+                "example": "Electronics"
+              },
+              "isActive": {
+                "type": "boolean",
+                "example": true
+              }
+            }
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        }
       },
       "addProduct": {
         "type": "object",
@@ -1383,7 +1486,7 @@
             "properties": {
               "id": {
                 "type": "string",
-                "example": "2mkre4j5gPo0BFGl5pyi"
+                "example": "cat123"
               }
             },
             "required": [
@@ -1397,6 +1500,7 @@
         },
         "required": [
           "name",
+          "description",
           "price",
           "category"
         ]
@@ -1410,7 +1514,7 @@
           },
           "description": {
             "type": "string",
-            "example": "One of the best smart TVs on the market."
+            "example": "Updated product description."
           },
           "price": {
             "type": "number",
@@ -1422,24 +1526,32 @@
             "properties": {
               "id": {
                 "type": "string",
-                "example": "2mkre4j5gPo0BFGl5pyi"
+                "example": "cat123"
               }
-            },
-            "required": [
-              "id"
-            ]
+            }
           },
           "isActive": {
             "type": "boolean",
             "example": false
           }
-        },
-        "required": [
-          "name",
-          "price",
-          "category",
-          "isActive"
-        ]
+        }
+      },
+      "PaymentMethod": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "pay123"
+          },
+          "description": {
+            "type": "string",
+            "example": "Credit Card"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        }
       },
       "addPaymentMethod": {
         "type": "object",
@@ -1452,10 +1564,7 @@
             "type": "boolean",
             "example": true
           }
-        },
-        "required": [
-          "description"
-        ]
+        }
       },
       "updatePaymentMethod": {
         "type": "object",
@@ -1468,11 +1577,120 @@
             "type": "boolean",
             "example": false
           }
-        },
-        "required": [
-          "description",
-          "isActive"
-        ]
+        }
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "zipcode": {
+            "type": "string",
+            "example": "75900000"
+          },
+          "street": {
+            "type": "string",
+            "example": "Xuxu Beleza St"
+          },
+          "number": {
+            "type": "string",
+            "example": "11"
+          },
+          "neighborhood": {
+            "type": "string",
+            "example": "XPTO District"
+          },
+          "complement": {
+            "type": "string",
+            "example": "Block 1, Lot 2"
+          },
+          "city": {
+            "type": "string",
+            "example": "Sampletown"
+          },
+          "uf": {
+            "type": "string",
+            "example": "CA"
+          }
+        }
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "phone": {
+            "type": "string",
+            "example": "11999999999"
+          }
+        }
+      },
+      "OrderItem": {
+        "type": "object",
+        "properties": {
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 1
+          },
+          "note": {
+            "type": "string",
+            "example": "No onions"
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "order123"
+          },
+          "company": {
+            "$ref": "#/components/schemas/Company"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "taxpayerId": {
+            "type": "string",
+            "example": "12345678901"
+          },
+          "date": {
+            "type": "string",
+            "example": "2024-05-01T12:00:00Z"
+          },
+          "isDelivery": {
+            "type": "boolean",
+            "example": true
+          },
+          "deliveryFee": {
+            "type": "number",
+            "example": 100
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            }
+          },
+          "status": {
+            "type": "string",
+            "example": "pending"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Leave at the front door"
+          }
+        }
       },
       "addOrder": {
         "type": "object",
@@ -1482,7 +1700,7 @@
             "properties": {
               "id": {
                 "type": "string",
-                "example": "1SBiiMrf4JUUFG57M76F"
+                "example": "comp123"
               }
             },
             "required": [
@@ -1533,18 +1751,18 @@
                 "type": "string",
                 "example": "Sampletown"
               },
-              "state": {
+              "uf": {
                 "type": "string",
                 "example": "CA"
               }
             },
             "required": [
+              "zipcode",
               "street",
               "number",
               "neighborhood",
-              "complement",
               "city",
-              "state"
+              "uf"
             ]
           },
           "taxpayerId": {},
@@ -1557,7 +1775,7 @@
             "properties": {
               "id": {
                 "type": "string",
-                "example": "NdmCoYl0iT3gHwhO0pyQ"
+                "example": "pay123"
               }
             },
             "required": [
@@ -1578,7 +1796,7 @@
                   "properties": {
                     "id": {
                       "type": "string",
-                      "example": "3UfzI8CSCaK5eC0UJ8gI"
+                      "example": "prod123"
                     }
                   },
                   "required": [
@@ -1599,17 +1817,14 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              null
-            ]
+            "example": "pending"
           },
           "notes": {}
         },
         "required": [
           "company",
           "customer",
-          "isDelivery",
+          "address",
           "paymentMethod",
           "deliveryFee",
           "items"
@@ -1619,13 +1834,25 @@
         "type": "object",
         "properties": {
           "status": {
-            "type": "string",
-            "enum": [
-              "approved",
-              "delivering",
-              "completed",
-              "cancelled"
-            ]
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "example": "string"
+              },
+              "enum": {
+                "type": "array",
+                "example": [
+                  "approved",
+                  "delivering",
+                  "completed",
+                  "cancelled"
+                ],
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
           }
         },
         "required": [
